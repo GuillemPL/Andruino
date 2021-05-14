@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "574319869521",
+    "project_id": "andruino-2b1f1",
+    "storage_bucket": "andruino-2b1f1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:574319869521:android:eb718691d99ab887754270",
+        "android_client_info": {
+          "package_name": "agz.technologies.andruino"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "574319869521-pfvuqc7s0coiraspg7387g15j5bkeggu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDmFDyL6IR1Vn43deEX7bXf_-ULQeijd6w"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "574319869521-pfvuqc7s0coiraspg7387g15j5bkeggu.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
