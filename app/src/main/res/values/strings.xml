@@ -16,4 +16,6 @@
     <string name="continuar">Continuar</string>
     <string name="registro">REGISTRO</string>
     <string name="recupera_contraseña">Introduce tu correo para recuperar la contraseña</string>
+    <string name="mode_camera">CÁMARA</string>
+    <string name="mode_controller">CONTROLADOR</string>
 </resources>
