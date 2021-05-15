@@ -10,11 +10,17 @@ import agz.technologies.andruino.databinding.FragmentLoginBinding
 import android.content.Intent
 import android.util.Patterns
 import androidx.navigation.fragment.findNavController
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.api.ApiException
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.GoogleAuthProvider
 
 
 class LoginFragment : Fragment() {
     private lateinit var binding: FragmentLoginBinding
+    lateinit var snackbar: Snackbar;
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -43,6 +49,16 @@ class LoginFragment : Fragment() {
                 }
             }
         }
+        binding.btnGoogle.setOnClickListener {
+            val googleConf = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build()
+            val googleClient = GoogleSignIn.getClient(requireContext(), googleConf)
+            googleClient.signOut()
+            startActivityForResult(googleClient.signInIntent,200)
+
+        }
         binding.tvRgister.setOnClickListener {
             findNavController().navigate(R.id.action_loginFragment_to_registerFragment)
         }
@@ -68,6 +84,31 @@ class LoginFragment : Fragment() {
         }
 
         return true
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == 200){
+           val task = GoogleSignIn.getSignedInAccountFromIntent(data)
+            try{
+                val account = task.getResult(ApiException::class.java)
+            if (account != null){
+                val credential = GoogleAuthProvider.getCredential(account.idToken,null)
+                FirebaseAuth.getInstance().signInWithCredential(credential)
+                    .addOnCompleteListener {
+                        if (it.isSuccessful) {
+                            findNavController().navigate(R.id.action_loginFragment_to_modeFragment)
+                        }else{
+                            snackbar = Snackbar.make(requireView(),"Error al iniciar sesión con Google", Snackbar.LENGTH_LONG)
+                            snackbar.show()
+                        }
+                    }
+            }
+            }catch (e: ApiException){
+                snackbar = Snackbar.make(requireView(),"Error al iniciar sesión con Google", Snackbar.LENGTH_LONG)
+                snackbar.show()
+            }
+        }
     }
 
 }

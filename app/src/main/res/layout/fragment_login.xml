@@ -141,7 +141,7 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <ImageButton
-        android:id="@+id/radioButton"
+        android:id="@+id/btnGoogle"
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:background="@drawable/ic_google"

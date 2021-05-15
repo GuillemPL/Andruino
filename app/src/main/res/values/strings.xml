@@ -14,6 +14,6 @@
     <string name="inicia_sesion">Inicia Sesión</string>
     <string name="tienes_una_cuenta">Tienes una cuenta?</string>
     <string name="continuar">Continuar</string>
-    <string name="registro">Registro</string>
+    <string name="registro">REGISTRO</string>
     <string name="recupera_contraseña">Introduce tu correo para recuperar la contraseña</string>
 </resources>
