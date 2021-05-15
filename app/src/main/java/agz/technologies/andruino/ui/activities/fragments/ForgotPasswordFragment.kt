@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import agz.technologies.andruino.R
 import agz.technologies.andruino.databinding.FragmentForgotPasswordBinding
 import android.widget.Toast
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 
 
@@ -29,7 +30,8 @@ class ForgotPasswordFragment : Fragment() {
             FirebaseAuth.getInstance().sendPasswordResetEmail(email)
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
-                        Toast.makeText(context, "Confirmado", Toast.LENGTH_SHORT).show()
+                        var snackbar = Snackbar.make(requireView(),"Confirmado", Snackbar.LENGTH_LONG)
+                        snackbar.show()
                     }
                 }
         }

@@ -91,8 +91,7 @@ class LoginFragment : Fragment() {
         if (requestCode == 200){
            val task = GoogleSignIn.getSignedInAccountFromIntent(data)
             try{
-                val account = task.getResult(ApiException::class.java)
-            if (account != null){
+                val account = task.getResult(ApiException::class.java)!!
                 val credential = GoogleAuthProvider.getCredential(account.idToken,null)
                 FirebaseAuth.getInstance().signInWithCredential(credential)
                     .addOnCompleteListener {
@@ -103,7 +102,6 @@ class LoginFragment : Fragment() {
                             snackbar.show()
                         }
                     }
-            }
             }catch (e: ApiException){
                 snackbar = Snackbar.make(requireView(),"Error al iniciar sesión con Google", Snackbar.LENGTH_LONG)
                 snackbar.show()
