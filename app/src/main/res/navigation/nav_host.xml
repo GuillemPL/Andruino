@@ -16,6 +16,9 @@
         <action
             android:id="@+id/action_loginFragment_to_modeFragment"
             app:destination="@id/modeFragment" />
+        <action
+            android:id="@+id/action_loginFragment_to_forgotPasswordFragment"
+            app:destination="@id/forgotPasswordFragment" />
     </fragment>
     <fragment
         android:id="@+id/registerFragment"
@@ -28,7 +31,12 @@
     </fragment>
     <fragment
         android:id="@+id/modeFragment"
-        android:name="agz.technologies.andruino.ui.activities.fragments.modeFragment"
+        android:name="agz.technologies.andruino.ui.activities.fragments.ModeFragment"
         android:label="fragment_mode"
         tools:layout="@layout/fragment_mode" />
+    <fragment
+        android:id="@+id/forgotPasswordFragment"
+        android:name="agz.technologies.andruino.ui.activities.fragments.ForgotPasswordFragment"
+        android:label="fragment_forgot_password"
+        tools:layout="@layout/fragment_forgot_password" />
 </navigation>

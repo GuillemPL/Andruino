@@ -7,7 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import agz.technologies.andruino.R
 
-class modeFragment : Fragment() {
+class ModeFragment : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

@@ -41,11 +41,14 @@ class LoginFragment : Fragment() {
                         binding.etPassword.error = "El email o la contraseña no son correctas"
                     }
                 }
-
             }
         }
         binding.tvRgister.setOnClickListener {
             findNavController().navigate(R.id.action_loginFragment_to_registerFragment)
+        }
+
+        binding.tvforgotPaswort.setOnClickListener{
+            findNavController().navigate(R.id.action_loginFragment_to_forgotPasswordFragment)
         }
     }
     fun checkLoginFields(): Boolean {
