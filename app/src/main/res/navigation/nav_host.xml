@@ -33,10 +33,19 @@
         android:id="@+id/modeFragment"
         android:name="agz.technologies.andruino.ui.activities.fragments.ModeFragment"
         android:label="fragment_mode"
-        tools:layout="@layout/fragment_mode" />
+        tools:layout="@layout/fragment_mode" >
+        <action
+            android:id="@+id/action_modeFragment_to_cameraFragment"
+            app:destination="@id/cameraFragment" />
+    </fragment>
     <fragment
         android:id="@+id/forgotPasswordFragment"
         android:name="agz.technologies.andruino.ui.activities.fragments.ForgotPasswordFragment"
         android:label="fragment_forgot_password"
         tools:layout="@layout/fragment_forgot_password" />
+    <fragment
+        android:id="@+id/cameraFragment"
+        android:name="agz.technologies.andruino.ui.activities.fragments.CameraFragment"
+        android:label="fragment_camera"
+        tools:layout="@layout/fragment_camera" />
 </navigation>

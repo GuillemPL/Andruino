@@ -24,16 +24,19 @@ class ForgotPasswordFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding =  FragmentForgotPasswordBinding.bind(view)
+        binding = FragmentForgotPasswordBinding.bind(view)
         binding.btnRegister.setOnClickListener {
-            val email = binding.etRecuEmail.text.toString()
-            FirebaseAuth.getInstance().sendPasswordResetEmail(email)
-                .addOnCompleteListener { task ->
-                    if (task.isSuccessful) {
-                        var snackbar = Snackbar.make(requireView(),"Confirmado", Snackbar.LENGTH_LONG)
-                        snackbar.show()
+            if (binding.etRecuEmail.text.toString().isNotEmpty()) {
+                val email = binding.etRecuEmail.text.toString()
+                FirebaseAuth.getInstance().sendPasswordResetEmail(email)
+                    .addOnCompleteListener { task ->
+                        if (task.isSuccessful) {
+                            val snackbar =
+                                Snackbar.make(requireView(), "Confirmado", Snackbar.LENGTH_LONG)
+                            snackbar.show()
+                        }
                     }
-                }
+            }
         }
     }
 
