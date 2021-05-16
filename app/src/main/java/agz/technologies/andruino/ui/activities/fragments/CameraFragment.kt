@@ -2,8 +2,10 @@ package agz.technologies.andruino.ui.activities.fragments
 
 import agz.technologies.andruino.R
 import agz.technologies.andruino.databinding.FragmentCameraBinding
+import android.Manifest
 import android.annotation.TargetApi
 import android.content.pm.ActivityInfo
+import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.os.Build
 import android.os.Bundle
@@ -14,6 +16,9 @@ import android.webkit.PermissionRequest
 import android.webkit.WebChromeClient
 import android.webkit.WebViewClient
 import androidx.annotation.RequiresApi
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import androidx.core.content.PermissionChecker.checkSelfPermission
 import androidx.fragment.app.Fragment
 
 
@@ -41,14 +46,24 @@ class CameraFragment : Fragment() {
     private fun  webViewSetup() {
         binding.webView.webViewClient = WebViewClient()
         binding.webView.webChromeClient = object : WebChromeClientCustomPoster() {
-            @TargetApi(Build.VERSION_CODES.LOLLIPOP)
             override fun onPermissionRequest(request: PermissionRequest) {
                 request.grant(request.resources)
             }
         }
 
+
+        if (ContextCompat.checkSelfPermission(requireContext(),
+                Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(requireContext(),
+                Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED){
+            val permissions = arrayOf(
+                android.Manifest.permission.RECORD_AUDIO,
+                android.Manifest.permission.CAMERA
+            )
+            ActivityCompat.requestPermissions(requireActivity(), permissions, 0)
+        }
+
         binding.webView.apply {
-            loadUrl("https://appr.tc/?audio=false&ipv6=true")
+            loadUrl("https://appr.tc")
             settings.javaScriptEnabled = true
             settings.domStorageEnabled = true
         }
@@ -70,5 +85,4 @@ class CameraFragment : Fragment() {
             return Bitmap.createBitmap(10, 10, Bitmap.Config.ARGB_8888)
         }
     }
-
 }
