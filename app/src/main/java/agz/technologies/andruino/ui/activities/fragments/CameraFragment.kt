@@ -10,10 +10,10 @@ import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
-import android.view.View.SCROLLBARS_OUTSIDE_OVERLAY
 import android.view.ViewGroup
 import android.webkit.PermissionRequest
 import android.webkit.WebChromeClient
+import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
@@ -55,7 +55,7 @@ class CameraFragment : Fragment() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun  webViewSetup() {
-        binding.webView.webViewClient = WebViewClient()
+        binding.webView.webViewClient = MyWebViewClient()
         binding.webView.webChromeClient = object : WebChromeClientCustomPoster() {
             override fun onPermissionRequest(request: PermissionRequest) {
                 request.grant(request.resources)
@@ -69,7 +69,7 @@ class CameraFragment : Fragment() {
             settings.mediaPlaybackRequiresUserGesture = false
 
             settings.userAgentString = newUA
-            loadUrl("https://zoom.us/signin")
+            loadUrl("https://www.vectera.com/login/")
         }
     }
 
@@ -88,6 +88,15 @@ class CameraFragment : Fragment() {
        override fun getDefaultVideoPoster(): Bitmap? {
             return Bitmap.createBitmap(10, 10, Bitmap.Config.ARGB_8888)
         }
+    }
+
+
+    inner class MyWebViewClient : WebViewClient() {
+        override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
+            view.loadUrl(url)
+            return false
+        }
+
     }
 
 }
