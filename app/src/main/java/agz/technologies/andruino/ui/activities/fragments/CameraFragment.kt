@@ -46,6 +46,7 @@ class CameraFragment : Fragment() {
     private fun  webViewSetup() {
         binding.webView.webViewClient = WebViewClient()
         binding.webView.webChromeClient = object : WebChromeClientCustomPoster() {
+            @TargetApi(Build.VERSION_CODES.LOLLIPOP)
             override fun onPermissionRequest(request: PermissionRequest) {
                 request.grant(request.resources)
             }
@@ -85,4 +86,5 @@ class CameraFragment : Fragment() {
             return Bitmap.createBitmap(10, 10, Bitmap.Config.ARGB_8888)
         }
     }
+
 }
