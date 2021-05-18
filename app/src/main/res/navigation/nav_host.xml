@@ -37,6 +37,9 @@
         <action
             android:id="@+id/action_modeFragment_to_cameraFragment"
             app:destination="@id/cameraFragment" />
+        <action
+            android:id="@+id/action_modeFragment_to_controllerFragment"
+            app:destination="@id/controllerFragment" />
     </fragment>
     <fragment
         android:id="@+id/forgotPasswordFragment"
@@ -48,4 +51,8 @@
         android:name="agz.technologies.andruino.ui.activities.fragments.CameraFragment"
         android:label="fragment_camera"
         tools:layout="@layout/fragment_camera" />
+    <fragment
+        android:id="@+id/controllerFragment"
+        android:name="agz.technologies.andruino.ui.activities.fragments.ControllerFragment"
+        android:label="ControllerFragment" />
 </navigation>
