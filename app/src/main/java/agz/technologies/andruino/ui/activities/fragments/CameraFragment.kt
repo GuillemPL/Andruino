@@ -56,21 +56,21 @@ class CameraFragment : Fragment() {
     @RequiresApi(Build.VERSION_CODES.O)
     private fun  webViewSetup() {
         binding.webView.webViewClient = MyWebViewClient()
+        val newUA = "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36"
+        binding.webView.apply {
+            settings.javaScriptEnabled = true
+          //  settings.allowUniversalAccessFromFileURLs = true
+            settings.domStorageEnabled = true
+            settings.mediaPlaybackRequiresUserGesture = false
+            settings.userAgentString = newUA
+
+        }
         binding.webView.webChromeClient = object : WebChromeClientCustomPoster() {
             override fun onPermissionRequest(request: PermissionRequest) {
                 request.grant(request.resources)
             }
         }
-
-        val newUA = "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36"
-        binding.webView.apply {
-            settings.javaScriptEnabled = true
-            settings.domStorageEnabled = true
-            settings.mediaPlaybackRequiresUserGesture = false
-
-            settings.userAgentString = newUA
-            loadUrl("https://www.vectera.com/login/")
-        }
+        binding.webView.loadUrl("https://www.vectera.com/login/")
     }
 
     override fun onResume() {
