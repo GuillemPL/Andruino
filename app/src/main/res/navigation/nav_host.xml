@@ -40,9 +40,6 @@
         <action
             android:id="@+id/action_modeFragment_to_controllerFragment"
             app:destination="@id/controllerFragment" />
-        <action
-            android:id="@+id/action_modeFragment_to_bluetoothFragment"
-            app:destination="@id/bluetoothFragment" />
     </fragment>
     <fragment
         android:id="@+id/forgotPasswordFragment"
@@ -58,9 +55,4 @@
         android:id="@+id/controllerFragment"
         android:name="agz.technologies.andruino.ui.activities.fragments.ControllerFragment"
         android:label="ControllerFragment" />
-    <fragment
-        android:id="@+id/bluetoothFragment"
-        android:name="agz.technologies.andruino.ui.activities.fragments.BluetoothFragment"
-        android:label="fragment_bluetooth"
-        tools:layout="@layout/fragment_bluetooth" />
 </navigation>
