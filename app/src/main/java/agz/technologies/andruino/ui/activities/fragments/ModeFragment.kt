@@ -26,11 +26,13 @@ class ModeFragment : Fragment() {
         binding = FragmentModeBinding.bind(view)
         var buttonCamera : CardView = binding.buttonCamera
         buttonCamera.setOnClickListener {
-            findNavController().navigate(R.id.action_modeFragment_to_cameraFragment)
+           // findNavController().navigate(R.id.action_modeFragment_to_cameraFragment)
+            findNavController().navigate(R.id.action_modeFragment_to_bluetoothFragment)
         }
         binding.buttonController.setOnClickListener {
             findNavController().navigate(R.id.action_modeFragment_to_controllerFragment)
         }
+
     }
 
 }
