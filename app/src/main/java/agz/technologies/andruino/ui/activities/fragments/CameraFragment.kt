@@ -50,13 +50,12 @@ class CameraFragment : Fragment() {
             ActivityCompat.requestPermissions(requireActivity(), permissions, 0)
         }
         webViewSetup()
-
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun  webViewSetup() {
         binding.webView.webViewClient = MyWebViewClient()
-        val newUA = "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36"
+        val newUA = "Mozilla/5.0 (Linux; Android 4.1.1; Galaxy Nexus Build/JRO03C) AppleWebKit/535.19 (KHTML, like Gecko) Chrome/18.0.1025.166 Safari/535.19"
         binding.webView.apply {
             settings.javaScriptEnabled = true
           //  settings.allowUniversalAccessFromFileURLs = true
@@ -70,7 +69,7 @@ class CameraFragment : Fragment() {
                 request.grant(request.resources)
             }
         }
-        binding.webView.loadUrl("https://www.vectera.com/login/")
+        binding.webView.loadUrl("https://www.youtube.com/")
     }
 
     override fun onResume() {

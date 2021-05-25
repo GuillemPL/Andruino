@@ -36,7 +36,6 @@ class BluetoothFragment : Fragment() {
         // Inflate the layout for this fragment
         Log.d("DeviceListActivity", "onCreate()")
         return inflater.inflate(R.layout.fragment_bluetooth, container, false)
-
     }
 
     // TODO: 19/05/2021 implementar listener en el recycler view para crear la conexión con el ble

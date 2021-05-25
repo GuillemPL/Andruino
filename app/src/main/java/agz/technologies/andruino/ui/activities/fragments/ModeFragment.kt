@@ -1,15 +1,18 @@
 package agz.technologies.andruino.ui.activities.fragments
 
+import agz.technologies.andruino.R
+import agz.technologies.andruino.databinding.FragmentModeBinding
+import android.content.ActivityNotFoundException
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import agz.technologies.andruino.R
-import agz.technologies.andruino.databinding.FragmentLoginBinding
-import agz.technologies.andruino.databinding.FragmentModeBinding
 import androidx.cardview.widget.CardView
+import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+
 
 class ModeFragment : Fragment() {
     private lateinit var binding: FragmentModeBinding
@@ -27,7 +30,18 @@ class ModeFragment : Fragment() {
         var buttonCamera : CardView = binding.buttonCamera
         buttonCamera.setOnClickListener {
            // findNavController().navigate(R.id.action_modeFragment_to_cameraFragment)
-            findNavController().navigate(R.id.action_modeFragment_to_bluetoothFragment)
+            val urlString = "https://www.youtube.com/"
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(urlString))
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            intent.setPackage("com.android.chrome")
+            try {
+                requireActivity().startActivity(intent)
+            } catch (ex: ActivityNotFoundException) {
+                // Chrome browser presumably not installed so allow user to choose instead
+                intent.setPackage(null)
+                requireActivity().startActivity(intent)
+            }
+
         }
         binding.buttonController.setOnClickListener {
             findNavController().navigate(R.id.action_modeFragment_to_controllerFragment)
