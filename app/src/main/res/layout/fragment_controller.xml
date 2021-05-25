@@ -7,12 +7,47 @@
     tools:context=".ui.activities.fragments.CameraFragment">
 
 
+    <Button
+        android:id="@+id/right"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginEnd="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/left"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        app:layout_constraintBottom_toTopOf="@+id/down"
+        app:layout_constraintEnd_toStartOf="@+id/up"
+        app:layout_constraintTop_toBottomOf="@+id/up" />
+
+    <Button
+        android:id="@+id/down"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        app:layout_constraintEnd_toStartOf="@+id/right"
+        app:layout_constraintTop_toBottomOf="@+id/right" />
+
+    <Button
+        android:id="@+id/up"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        app:layout_constraintBottom_toTopOf="@+id/right"
+        app:layout_constraintEnd_toStartOf="@+id/right" />
+
     <WebView
         android:id="@+id/webView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0">
+
+    </WebView>
 </androidx.constraintlayout.widget.ConstraintLayout>
