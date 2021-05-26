@@ -43,6 +43,9 @@
         <action
             android:id="@+id/action_modeFragment_to_bluetoothFragment"
             app:destination="@id/bluetoothFragment" />
+        <action
+            android:id="@+id/action_modeFragment_to_mapsFragment"
+            app:destination="@id/mapsFragment" />
     </fragment>
     <fragment
         android:id="@+id/forgotPasswordFragment"
@@ -63,4 +66,9 @@
         android:name="agz.technologies.andruino.ui.activities.fragments.BluetoothFragment"
         android:label="fragment_bluetooth"
         tools:layout="@layout/fragment_bluetooth" />
+    <fragment
+        android:id="@+id/mapsFragment"
+        android:name="agz.technologies.andruino.ui.activities.fragments.MapsFragment"
+        android:label="fragment_maps"
+        tools:layout="@layout/fragment_maps" />
 </navigation>

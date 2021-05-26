@@ -121,10 +121,4 @@ class LoginFragment : Fragment() {
             }
         }
     }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        (activity as DrawerLocker?)!!.setDrawerLocked(false)
-    }
-
 }

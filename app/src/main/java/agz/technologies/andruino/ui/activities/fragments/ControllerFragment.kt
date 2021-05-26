@@ -40,19 +40,6 @@ class ControllerFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentControllerBinding.bind(view)
-        if (ContextCompat.checkSelfPermission(
-                requireContext(),
-                Manifest.permission.RECORD_AUDIO
-            ) != PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(
-                requireContext(),
-                Manifest.permission.CAMERA
-            ) != PackageManager.PERMISSION_GRANTED){
-            val permissions = arrayOf(
-                android.Manifest.permission.RECORD_AUDIO,
-                android.Manifest.permission.CAMERA
-            )
-            ActivityCompat.requestPermissions(requireActivity(), permissions, 0)
-        }
         webViewSetup()
         binding.up.setOnTouchListener { v, event ->
             if (MotionEvent.ACTION_DOWN == event.action){

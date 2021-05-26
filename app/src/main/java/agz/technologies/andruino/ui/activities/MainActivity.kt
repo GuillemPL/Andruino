@@ -61,7 +61,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when (item.itemId){
-            R.id.modeFragment -> Toast.makeText(this,"Clown", Toast.LENGTH_SHORT).show()
+            R.id.modeFragment -> findNavController(R.id.fragment).navigate(R.id.modeFragment)
+            R.id.mapsFragment -> findNavController(R.id.fragment).navigate(R.id.mapsFragment)
         }
         drawerLayout.closeDrawer(GravityCompat.START)
         return true

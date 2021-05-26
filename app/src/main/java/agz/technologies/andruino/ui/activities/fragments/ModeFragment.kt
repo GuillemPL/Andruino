@@ -29,19 +29,7 @@ class ModeFragment : Fragment() {
         binding = FragmentModeBinding.bind(view)
         var buttonCamera : CardView = binding.buttonCamera
         buttonCamera.setOnClickListener {
-           // findNavController().navigate(R.id.action_modeFragment_to_cameraFragment)
-            val urlString = "https://www.youtube.com/"
-            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(urlString))
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            intent.setPackage("com.android.chrome")
-            try {
-                requireActivity().startActivity(intent)
-            } catch (ex: ActivityNotFoundException) {
-                // Chrome browser presumably not installed so allow user to choose instead
-                intent.setPackage(null)
-                requireActivity().startActivity(intent)
-            }
-
+           findNavController().navigate(R.id.action_modeFragment_to_cameraFragment)
         }
         binding.buttonController.setOnClickListener {
             findNavController().navigate(R.id.action_modeFragment_to_controllerFragment)
