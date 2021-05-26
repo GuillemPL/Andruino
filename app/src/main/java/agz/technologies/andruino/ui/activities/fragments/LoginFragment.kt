@@ -1,14 +1,16 @@
 package agz.technologies.andruino.ui.activities.fragments
 
+import agz.technologies.andruino.R
+import agz.technologies.andruino.databinding.FragmentLoginBinding
+import agz.technologies.andruino.model.DrawerLocker
+import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import agz.technologies.andruino.R
-import agz.technologies.andruino.databinding.FragmentLoginBinding
-import android.content.Intent
-import android.util.Patterns
+import androidx.drawerlayout.widget.DrawerLayout
+import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -27,13 +29,15 @@ class LoginFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
+
+
+        activity?.actionBar?.hide()
         return inflater.inflate(R.layout.fragment_login, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentLoginBinding.bind(view)
-
         binding.btnLogin.setOnClickListener{
             if (checkLoginFields()) {
                 FirebaseAuth.getInstance().signInWithEmailAndPassword(
@@ -56,7 +60,7 @@ class LoginFragment : Fragment() {
                 .build()
             val googleClient = GoogleSignIn.getClient(requireContext(), googleConf)
             googleClient.signOut()
-            startActivityForResult(googleClient.signInIntent,200)
+            startActivityForResult(googleClient.signInIntent, 200)
 
         }
         binding.tvRgister.setOnClickListener {
@@ -66,6 +70,7 @@ class LoginFragment : Fragment() {
         binding.tvforgotPaswort.setOnClickListener{
             findNavController().navigate(R.id.action_loginFragment_to_forgotPasswordFragment)
         }
+
     }
     fun checkLoginFields(): Boolean {
         if (binding.etEmail.text.isEmpty() || binding.etPassword.text.isEmpty() || !Patterns.EMAIL_ADDRESS.matcher(
@@ -92,21 +97,34 @@ class LoginFragment : Fragment() {
            val task = GoogleSignIn.getSignedInAccountFromIntent(data)
             try{
                 val account = task.getResult(ApiException::class.java)!!
-                val credential = GoogleAuthProvider.getCredential(account.idToken,null)
+                val credential = GoogleAuthProvider.getCredential(account.idToken, null)
                 FirebaseAuth.getInstance().signInWithCredential(credential)
                     .addOnCompleteListener {
                         if (it.isSuccessful) {
                             findNavController().navigate(R.id.action_loginFragment_to_modeFragment)
                         }else{
-                            snackbar = Snackbar.make(requireView(),"Error al iniciar sesión con Google", Snackbar.LENGTH_LONG)
+                            snackbar = Snackbar.make(
+                                requireView(),
+                                "Error al iniciar sesión con Google",
+                                Snackbar.LENGTH_LONG
+                            )
                             snackbar.show()
                         }
                     }
             }catch (e: ApiException){
-                snackbar = Snackbar.make(requireView(),"Error al iniciar sesión con Google", Snackbar.LENGTH_LONG)
+                snackbar = Snackbar.make(
+                    requireView(),
+                    "Error al iniciar sesión con Google",
+                    Snackbar.LENGTH_LONG
+                )
                 snackbar.show()
             }
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        (activity as DrawerLocker?)!!.setDrawerLocked(false)
     }
 
 }
