@@ -25,7 +25,6 @@ import com.google.android.material.navigation.NavigationView
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
-
     private lateinit var navController: NavController
     private lateinit var drawerLayout: DrawerLayout
     private lateinit var appBarConfiguration: AppBarConfiguration
