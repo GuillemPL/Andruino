@@ -61,6 +61,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         when (item.itemId){
             R.id.modeFragment -> findNavController(R.id.fragment).navigate(R.id.modeFragment)
             R.id.mapsFragment -> findNavController(R.id.fragment).navigate(R.id.mapsFragment)
+            R.id.datosFragment -> findNavController(R.id.fragment).navigate(R.id.datosFragment)
+            R.id.arFragment -> findNavController(R.id.fragment).navigate(R.id.arFragment)
+          //  R.id.cerrar_sesion ->
         }
         drawerLayout.closeDrawer(GravityCompat.START)
         return true
