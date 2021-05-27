@@ -4,25 +4,20 @@ import agz.technologies.andruino.R
 import agz.technologies.andruino.databinding.FragmentCameraBinding
 import android.Manifest
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
-import android.graphics.Bitmap
 import android.location.LocationManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.webkit.PermissionRequest
-import android.webkit.WebChromeClient
-import android.webkit.WebView
-import android.webkit.WebViewClient
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -116,8 +111,8 @@ class CameraFragment : Fragment() {
                         longitude = it.result.longitude
 
                         FirebaseFirestore.getInstance().collection("user")
-                            .document(FirebaseAuth.getInstance().currentUser?.email.toString()).set(
-                            hashMapOf("ubicacion" to "$latitude,$longitude")
+                            .document(FirebaseAuth.getInstance().currentUser?.email.toString()).update(
+                            mapOf("ubicacion" to "$latitude,$longitude")
                         )
                     }
                 }
