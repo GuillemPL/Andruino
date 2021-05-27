@@ -2,14 +2,14 @@ package agz.technologies.andruino.ui.activities.fragments
 
 import agz.technologies.andruino.R
 import agz.technologies.andruino.databinding.FragmentLoginBinding
-import agz.technologies.andruino.model.DrawerLocker
 import android.content.Intent
 import android.os.Bundle
 import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.drawerlayout.widget.DrawerLayout
+import androidx.appcompat.app.ActionBar
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -31,7 +31,7 @@ class LoginFragment : Fragment() {
         // Inflate the layout for this fragment
 
 
-        activity?.actionBar?.hide()
+
         return inflater.inflate(R.layout.fragment_login, container, false)
     }
 
@@ -120,5 +120,17 @@ class LoginFragment : Fragment() {
                 snackbar.show()
             }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        val supportActionBar: ActionBar? = (requireActivity() as AppCompatActivity).supportActionBar
+        if (supportActionBar != null) supportActionBar.hide()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        val supportActionBar: ActionBar? = (requireActivity() as AppCompatActivity).supportActionBar
+        if (supportActionBar != null) supportActionBar.show()
     }
 }

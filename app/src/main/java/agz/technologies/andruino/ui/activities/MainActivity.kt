@@ -12,6 +12,7 @@ import android.view.MenuItem
 import android.widget.Toast
 import android.widget.Toolbar
 import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.NavController
@@ -38,9 +39,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val toolbar:androidx.appcompat.widget.Toolbar = findViewById(R.id.toolbar_main)
 
         setSupportActionBar(toolbar)
-
+        supportActionBar?.setDisplayShowTitleEnabled(false);
         drawerLayout = findViewById(R.id.drawer_layout)
-
+        toolbar.navigationIcon = ContextCompat.getDrawable(this, R.drawable.ic_menuu)
         toggle = ActionBarDrawerToggle(
             this,
             drawerLayout,
@@ -50,9 +51,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         )
 
         drawerLayout.addDrawerListener(toggle)
-
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.setHomeButtonEnabled(true)
 
         navigationView = findViewById(R.id.navigationView)
         navigationView.itemIconTintList = null
