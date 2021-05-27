@@ -81,7 +81,11 @@ class ControllerFragment : Fragment() {
     private fun controlador(data: String) {
         FirebaseFirestore.getInstance().collection("user").document(FirebaseAuth.getInstance().currentUser?.email.toString()).update(
             mapOf("controller" to data)
-        )
+        ).addOnFailureListener {
+            FirebaseFirestore.getInstance().collection("user").document(FirebaseAuth.getInstance().currentUser?.email.toString()).set(
+                mapOf("controller" to data)
+            )
+        }
     }
 
     @RequiresApi(Build.VERSION_CODES.O)

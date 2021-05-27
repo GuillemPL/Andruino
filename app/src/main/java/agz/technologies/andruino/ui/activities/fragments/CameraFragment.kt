@@ -113,7 +113,11 @@ class CameraFragment : Fragment() {
                         FirebaseFirestore.getInstance().collection("user")
                             .document(FirebaseAuth.getInstance().currentUser?.email.toString()).update(
                             mapOf("ubicacion" to "$latitude,$longitude")
-                        )
+                        ).addOnFailureListener {
+                                FirebaseFirestore.getInstance().collection("user")
+                                    .document(FirebaseAuth.getInstance().currentUser?.email.toString()).set(
+                                        mapOf("ubicacion" to "$latitude,$longitude"))
+                            }
                     }
                 }
             }
@@ -128,6 +132,5 @@ class CameraFragment : Fragment() {
             }
         }, 5000)
     }
-
 
 }
