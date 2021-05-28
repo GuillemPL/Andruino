@@ -75,7 +75,6 @@ class ControllerFragment : Fragment() {
             }
             false
         }
-
     }
 
     private fun controlador(data: String) {

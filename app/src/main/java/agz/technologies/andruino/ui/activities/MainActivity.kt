@@ -1,27 +1,21 @@
 package agz.technologies.andruino.ui.activities
 
 import agz.technologies.andruino.R
-import agz.technologies.andruino.model.DrawerLocker
+import android.content.Intent
 import android.content.res.Configuration
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.PersistableBundle
 import android.view.MenuItem
-import android.widget.Toast
-import android.widget.Toolbar
 import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.navigateUp
-import androidx.navigation.ui.setupActionBarWithNavController
-import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.navigation.NavigationView
+
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
@@ -62,7 +56,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             R.id.mapsFragment -> findNavController(R.id.fragment).navigate(R.id.mapsFragment)
             R.id.datosFragment -> findNavController(R.id.fragment).navigate(R.id.datosFragment)
             R.id.arFragment -> findNavController(R.id.fragment).navigate(R.id.arFragment)
-          //  R.id.cerrar_sesion ->
+            R.id.cerrar_sesion -> {
+                findNavController(R.id.fragment).navigate(R.id.loginFragment)
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+                startActivity(intent)
+            }
+
         }
         drawerLayout.closeDrawer(GravityCompat.START)
         return true
