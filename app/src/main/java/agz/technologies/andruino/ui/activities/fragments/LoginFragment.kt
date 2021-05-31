@@ -2,6 +2,8 @@ package agz.technologies.andruino.ui.activities.fragments
 
 import agz.technologies.andruino.R
 import agz.technologies.andruino.databinding.FragmentLoginBinding
+import agz.technologies.andruino.model.DrawerLocker
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Patterns
@@ -10,6 +12,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -23,14 +26,13 @@ import com.google.firebase.auth.GoogleAuthProvider
 class LoginFragment : Fragment() {
     private lateinit var binding: FragmentLoginBinding
     lateinit var snackbar: Snackbar;
-
+    private lateinit var drawerLocker : DrawerLocker
+    private lateinit var d : DrawerLayout
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-
-
 
         return inflater.inflate(R.layout.fragment_login, container, false)
     }
@@ -126,11 +128,19 @@ class LoginFragment : Fragment() {
         super.onResume()
         val supportActionBar: ActionBar? = (requireActivity() as AppCompatActivity).supportActionBar
         if (supportActionBar != null) supportActionBar.hide()
+        d = requireActivity().findViewById(R.id.drawer_layout)
+        d.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
     }
 
     override fun onStop() {
         super.onStop()
         val supportActionBar: ActionBar? = (requireActivity() as AppCompatActivity).supportActionBar
         if (supportActionBar != null) supportActionBar.show()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        //(activity as MainActivity?)?.setDrawerUnlocked()
+        d.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
     }
 }

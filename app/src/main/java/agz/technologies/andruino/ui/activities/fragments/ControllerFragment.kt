@@ -90,11 +90,7 @@ class ControllerFragment : Fragment() {
     @RequiresApi(Build.VERSION_CODES.O)
     private fun  webViewSetup() {
         binding.webView.webViewClient = WebViewClient()
-        binding.webView.webChromeClient = object : WebChromeClientCustomPoster() {
-            override fun onPermissionRequest(request: PermissionRequest) {
-                request.grant(request.resources)
-            }
-        }
+        binding.webView.webChromeClient = WebChromeClientCustomPoster()
 
         val newUA = "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36"
         binding.webView.apply {

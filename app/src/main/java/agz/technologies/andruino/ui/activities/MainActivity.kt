@@ -1,6 +1,7 @@
 package agz.technologies.andruino.ui.activities
 
 import agz.technologies.andruino.R
+import agz.technologies.andruino.model.DrawerLocker
 import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
@@ -17,7 +18,8 @@ import androidx.navigation.ui.AppBarConfiguration
 import com.google.android.material.navigation.NavigationView
 
 
-class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
+class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener,
+    DrawerLocker {
 
     private lateinit var navController: NavController
     private lateinit var drawerLayout: DrawerLayout
@@ -25,12 +27,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private lateinit var navigationView: NavigationView
     private lateinit var listener: NavController.OnDestinationChangedListener
     private lateinit var toggle: ActionBarDrawerToggle
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-        val toolbar:androidx.appcompat.widget.Toolbar = findViewById(R.id.toolbar_main)
-
+        val toolbar: androidx.appcompat.widget.Toolbar = findViewById(R.id.toolbar_main)
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayShowTitleEnabled(false);
         drawerLayout = findViewById(R.id.drawer_layout)
@@ -51,10 +52,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
-        when (item.itemId){
+        when (item.itemId) {
             R.id.modeFragment -> findNavController(R.id.fragment).navigate(R.id.modeFragment)
             R.id.mapsFragment -> findNavController(R.id.fragment).navigate(R.id.mapsFragment)
-            R.id.datosFragment -> findNavController(R.id.fragment).navigate(R.id.datosFragment)
+            R.id.datosFragment -> findNavController(R.id.fragment).navigate(R.id.datosFragment2)
             R.id.arFragment -> findNavController(R.id.fragment).navigate(R.id.arFragment)
             R.id.cerrar_sesion -> {
                 findNavController(R.id.fragment).navigate(R.id.loginFragment)
@@ -78,9 +79,18 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if(toggle.onOptionsItemSelected(item)){
+        if (toggle.onOptionsItemSelected(item)) {
             return true
         }
         return super.onOptionsItemSelected(item)
     }
+
+    override fun setDrawerLocked() {
+        drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
+    }
+
+    override fun setDrawerUnlocked() {
+        drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
+    }
+
 }

@@ -71,4 +71,9 @@
         android:name="agz.technologies.andruino.ui.activities.fragments.MapsFragment"
         android:label="fragment_maps"
         tools:layout="@layout/fragment_maps" />
+    <fragment
+        android:id="@+id/datosFragment2"
+        android:name="agz.technologies.andruino.ui.activities.fragments.DatosFragment"
+        android:label="fragment_datos"
+        tools:layout="@layout/fragment_datos" />
 </navigation>

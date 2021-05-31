@@ -2,9 +2,6 @@ package agz.technologies.andruino.ui.activities.fragments
 
 import agz.technologies.andruino.R
 import agz.technologies.andruino.databinding.FragmentModeBinding
-import android.content.ActivityNotFoundException
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -29,7 +26,9 @@ class ModeFragment : Fragment() {
         binding = FragmentModeBinding.bind(view)
         var buttonCamera : CardView = binding.buttonCamera
         buttonCamera.setOnClickListener {
-           findNavController().navigate(R.id.action_modeFragment_to_cameraFragment)
+          // findNavController().navigate(R.id.action_modeFragment_to_cameraFragment)
+
+
         }
         binding.buttonController.setOnClickListener {
             findNavController().navigate(R.id.action_modeFragment_to_controllerFragment)

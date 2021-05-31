@@ -7,34 +7,49 @@
     tools:context=".ui.activities.fragments.CameraFragment">
 
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/right"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_marginEnd="20dp"
+        app:icon="@drawable/ic_right"
+        app:iconGravity="textStart"
+        android:gravity="center"
+        app:iconPadding="1dp"
+        android:layout_width="60dp"
+        android:layout_height="70dp"
+        android:layout_marginEnd="40dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/left"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        app:iconGravity="textEnd"
+        android:gravity="center"
+        app:icon="@drawable/ic_left"
+        android:layout_width="60dp"
+        android:layout_height="70dp"
         app:layout_constraintBottom_toTopOf="@+id/down"
         app:layout_constraintEnd_toStartOf="@+id/up"
         app:layout_constraintTop_toBottomOf="@+id/up" />
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/down"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="60dp"
+        android:layout_height="70dp"
+        android:gravity="center"
+        android:rotation="-90"
+        app:icon="@drawable/ic_left"
+        app:iconGravity="textEnd"
         app:layout_constraintEnd_toStartOf="@+id/right"
         app:layout_constraintTop_toBottomOf="@+id/right" />
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/up"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:gravity="center"
+        android:rotation="90"
+        app:icon="@drawable/ic_left"
+        app:iconGravity="textEnd"
+        android:layout_width="60dp"
+        android:layout_height="70dp"
         app:layout_constraintBottom_toTopOf="@+id/right"
         app:layout_constraintEnd_toStartOf="@+id/right" />
 
@@ -42,6 +57,7 @@
         android:id="@+id/webView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
