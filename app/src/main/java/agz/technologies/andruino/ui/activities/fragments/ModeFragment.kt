@@ -11,7 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 
 
-class ModeFragment : Fragment() {
+class ModeFragment : Fragment(){
     private lateinit var binding: FragmentModeBinding
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

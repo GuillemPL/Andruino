@@ -14,6 +14,7 @@ import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -40,7 +41,10 @@ class LoginFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentLoginBinding.bind(view)
-        binding.btnLogin.setOnClickListener{
+        if(FirebaseAuth.getInstance().currentUser != null){
+            findNavController().navigate(R.id.modeFragment)
+        }
+        binding.btnLogin.setOnClickListener {
             if (checkLoginFields()) {
                 FirebaseAuth.getInstance().signInWithEmailAndPassword(
                     binding.etEmail.text.toString(),
@@ -54,6 +58,7 @@ class LoginFragment : Fragment() {
                     }
                 }
             }
+
         }
         binding.btnGoogle.setOnClickListener {
             val googleConf = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -69,19 +74,21 @@ class LoginFragment : Fragment() {
             findNavController().navigate(R.id.action_loginFragment_to_registerFragment)
         }
 
-        binding.tvforgotPaswort.setOnClickListener{
+        binding.tvforgotPaswort.setOnClickListener {
             findNavController().navigate(R.id.action_loginFragment_to_forgotPasswordFragment)
         }
 
     }
+
     fun checkLoginFields(): Boolean {
         if (binding.etEmail.text.isEmpty() || binding.etPassword.text.isEmpty() || !Patterns.EMAIL_ADDRESS.matcher(
                 binding.etEmail.text.toString()
-            ).matches()) {
+            ).matches()
+        ) {
             if (binding.etEmail.text.isEmpty()) {
                 binding.etEmail.error = "El campo está vacío"
 
-            }else{
+            } else {
                 binding.etEmail.error = "No es un email válido"
             }
             if (binding.etPassword.text.isEmpty()) {
@@ -95,16 +102,16 @@ class LoginFragment : Fragment() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == 200){
-           val task = GoogleSignIn.getSignedInAccountFromIntent(data)
-            try{
+        if (requestCode == 200) {
+            val task = GoogleSignIn.getSignedInAccountFromIntent(data)
+            try {
                 val account = task.getResult(ApiException::class.java)!!
                 val credential = GoogleAuthProvider.getCredential(account.idToken, null)
                 FirebaseAuth.getInstance().signInWithCredential(credential)
                     .addOnCompleteListener {
                         if (it.isSuccessful) {
                             findNavController().navigate(R.id.action_loginFragment_to_modeFragment)
-                        }else{
+                        } else {
                             snackbar = Snackbar.make(
                                 requireView(),
                                 "Error al iniciar sesión con Google",
@@ -113,7 +120,7 @@ class LoginFragment : Fragment() {
                             snackbar.show()
                         }
                     }
-            }catch (e: ApiException){
+            } catch (e: ApiException) {
                 snackbar = Snackbar.make(
                     requireView(),
                     "Error al iniciar sesión con Google",

@@ -36,21 +36,24 @@ class MapsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?
-        FirebaseFirestore.getInstance().collection("user").document(FirebaseAuth.getInstance().currentUser?.email.toString()).get().addOnSuccessListener {
-            if (it != null) {
-                ubicacion   = it.get("ubicacion") as String
-                var cordenadas = ubicacion.split(",")
-                callback = OnMapReadyCallback { googleMap ->
-                    var andruino = LatLng(cordenadas[0].toDouble(), cordenadas[1].toDouble())
-                    googleMap.addMarker(MarkerOptions().position(andruino).title("Andruino"))
-                    googleMap.moveCamera(CameraUpdateFactory.newLatLng(andruino))
-                }
-                mapFragment?.getMapAsync(callback)
+        FirebaseFirestore.getInstance().collection("user").document(FirebaseAuth.getInstance().currentUser?.email.toString()).collection("datos").document("datos").get().addOnSuccessListener {
+            if (it.get("ubicacion") != null) {
+                    ubicacion = it.get("ubicacion") as String
+                    var cordenadas = ubicacion.split(",")
+                    callback = OnMapReadyCallback { googleMap ->
+                        var andruino = LatLng(cordenadas[0].toDouble(), cordenadas[1].toDouble())
+                        googleMap.addMarker(MarkerOptions().position(andruino).title("Andruino"))
+                        googleMap.moveCamera(CameraUpdateFactory.newLatLng(andruino))
+                    }
+                    mapFragment?.getMapAsync(callback)
+            }else{
+                var snackbar = Snackbar.make(
+                    requireView(),
+                    "Esta cuenta no tiene datos",
+                    Snackbar.LENGTH_LONG
+                )
+                snackbar.show()
             }
-
-        }.addOnFailureListener {
-           var snackbar = Snackbar.make(requireView(),"Error al obtener la ubicacion del Andruino", Snackbar.LENGTH_LONG)
-            snackbar.show()
         }
 
     }

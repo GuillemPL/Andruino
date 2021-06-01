@@ -14,6 +14,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
+import android.service.autofill.FieldClassification
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -32,7 +33,6 @@ import com.google.firebase.firestore.FirebaseFirestore
 
 class CameraFragment : Fragment() {
     private lateinit var binding: FragmentCameraBinding
-
     private lateinit var client: FusedLocationProviderClient
     private var latitude: Double = 0.0
     private var longitude: Double = 0.0
@@ -55,10 +55,11 @@ class CameraFragment : Fragment() {
             ) != PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(
                 requireContext(),
                 Manifest.permission.ACCESS_COARSE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED){
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
             val permissions = arrayOf(
-                android.Manifest.permission.ACCESS_FINE_LOCATION,
-                android.Manifest.permission.ACCESS_COARSE_LOCATION
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.ACCESS_COARSE_LOCATION
             )
             ActivityCompat.requestPermissions(requireActivity(), permissions, 0)
         }
@@ -110,25 +111,30 @@ class CameraFragment : Fragment() {
                         latitude = it.result.latitude
                         longitude = it.result.longitude
 
+
                         FirebaseFirestore.getInstance().collection("user")
-                            .document(FirebaseAuth.getInstance().currentUser?.email.toString()).update(
-                            mapOf("ubicacion" to "$latitude,$longitude")
-                        ).addOnFailureListener {
+                            .document(FirebaseAuth.getInstance().currentUser?.email.toString())
+                            .collection("datos").document("datos").update(
+                                mapOf("ubicacion" to "$latitude,$longitude")
+                            ).addOnFailureListener {
                                 FirebaseFirestore.getInstance().collection("user")
-                                    .document(FirebaseAuth.getInstance().currentUser?.email.toString()).set(
-                                        mapOf("ubicacion" to "$latitude,$longitude"))
+                                    .document(FirebaseAuth.getInstance().currentUser?.email.toString())
+                                    .collection("datos").document("datos").set(
+                                        mapOf("ubicacion" to "$latitude,$longitude")
+                                    )
                             }
                     }
                 }
             }
         }
     }
+
     private fun ejecutar() {
         val handler = Handler()
         handler.postDelayed(object : Runnable {
             override fun run() {
                 getCurrentLocation() //llamamos nuestro metodo
-                handler.postDelayed(this,  5000)
+                handler.postDelayed(this, 100000)
             }
         }, 5000)
     }

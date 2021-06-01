@@ -46,6 +46,9 @@
         <action
             android:id="@+id/action_modeFragment_to_mapsFragment"
             app:destination="@id/mapsFragment" />
+        <action
+            android:id="@+id/action_modeFragment_to_datosFragment2"
+            app:destination="@id/datosFragment2" />
     </fragment>
     <fragment
         android:id="@+id/forgotPasswordFragment"
