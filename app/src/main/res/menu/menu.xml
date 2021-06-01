@@ -11,10 +11,6 @@
             android:icon="@drawable/ic_mapss"
             android:title="Mapa" />
         <item
-            android:id="@+id/arFragment"
-            android:icon="@drawable/ic_arr"
-            android:title="Modo AR" />
-        <item
             android:id="@+id/modeFragment"
             android:icon="@drawable/ic_arrows"
             android:title="Cambiar modo" />

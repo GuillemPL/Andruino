@@ -58,7 +58,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             R.id.modeFragment -> findNavController(R.id.fragment).navigate(R.id.modeFragment)
             R.id.mapsFragment -> findNavController(R.id.fragment).navigate(R.id.mapsFragment)
             R.id.datosFragment -> findNavController(R.id.fragment).navigate(R.id.datosFragment2)
-            R.id.arFragment -> findNavController(R.id.fragment).navigate(R.id.arFragment)
             R.id.cerrar_sesion -> {
                 findNavController(R.id.fragment).navigate(R.id.loginFragment)
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)

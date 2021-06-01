@@ -24,6 +24,7 @@ import android.os.Looper
 import android.util.Log
 import android.view.View
 import android.widget.Button
+import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -37,6 +38,7 @@ import com.google.android.gms.tasks.CancellationTokenSource
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import org.jetbrains.anko.find
 import java.util.*
 
 class BluetoothActivity : AppCompatActivity() {
@@ -212,6 +214,8 @@ class BluetoothActivity : AppCompatActivity() {
                         recyclerView.visibility = View.GONE
                         var button : Button = findViewById(R.id.button_directo)
                         var button2 : Button = findViewById(R.id.scan_button)
+                        var tvScan : TextView = findViewById(R.id.tv_inicio_scan)
+                        tvScan.text = "Inicie el directo para habilitar el vídeo."
                        snack.show()
 
                         button.visibility = View.VISIBLE
@@ -347,7 +351,6 @@ class BluetoothActivity : AppCompatActivity() {
             gatt.writeCharacteristic(characteristic)
         } ?: error("Not connected to a BLE device!")
     }
-
 
     fun BluetoothGattCharacteristic.isReadable(): Boolean =
         containsProperty(BluetoothGattCharacteristic.PROPERTY_READ)
