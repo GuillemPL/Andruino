@@ -41,9 +41,9 @@ class LoginFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentLoginBinding.bind(view)
-        if(FirebaseAuth.getInstance().currentUser != null){
-            findNavController().navigate(R.id.modeFragment)
-        }
+//        if(FirebaseAuth.getInstance().currentUser != null){
+//            findNavController().navigate(R.id.modeFragment)
+//        }
         binding.btnLogin.setOnClickListener {
             if (checkLoginFields()) {
                 FirebaseAuth.getInstance().signInWithEmailAndPassword(

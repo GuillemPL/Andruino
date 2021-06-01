@@ -3,15 +3,19 @@ package agz.technologies.andruino.ui.activities
 import agz.technologies.andruino.R
 import agz.technologies.andruino.ui.activities.fragments.ScanResultAdapter
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.bluetooth.*
 import android.bluetooth.le.ScanCallback
 import android.bluetooth.le.ScanResult
 import android.bluetooth.le.ScanSettings
+import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.location.LocationManager
+import android.net.Uri
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -19,13 +23,23 @@ import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import android.view.MotionEvent
+import android.view.View
 import android.widget.Button
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SimpleItemAnimator
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationRequest
+import com.google.android.gms.location.LocationServices
+import com.google.android.gms.tasks.CancellationTokenSource
+import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import java.util.*
 
 class BluetoothActivity : AppCompatActivity() {
@@ -33,10 +47,21 @@ class BluetoothActivity : AppCompatActivity() {
     private val LOCATION_PERMISSION_REQUEST_CODE = 2
     lateinit var scanButton: Button
     lateinit var bluetoothGatt: BluetoothGatt
+    lateinit var snack: Snackbar
+    private lateinit var client: FusedLocationProviderClient
+    private var latitude: Double = 0.0
+    private var longitude: Double = 0.0
+    lateinit var uuid_service : UUID
+    lateinit var uuid_characteristic : UUID
     private lateinit var recyclerView: RecyclerView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_bluetooth)
+        snack = Snackbar.make(
+            findViewById(android.R.id.content),
+            "Conexión establecida",
+            Snackbar.LENGTH_LONG
+        )
         setupRecyclerView()
         scanButton = findViewById(R.id.scan_button)
         scanButton.setOnClickListener {
@@ -49,27 +74,23 @@ class BluetoothActivity : AppCompatActivity() {
 
         var buttonAdelante : Button = findViewById(R.id.btn_send)
         var buttonStop : Button = findViewById(R.id.btn_stop)
-        var uuid_service = UUID.fromString("4fafc201-1fb5-459e-8fcc-c5c9c331914b")
-        var uuid_characteristic = UUID.fromString("beb5483e-36e1-4688-b7f5-ea07361b26a8")
-        val charset = Charsets.UTF_8
+        uuid_service = UUID.fromString("4fafc201-1fb5-459e-8fcc-c5c9c331914b")
+        uuid_characteristic = UUID.fromString("beb5483e-36e1-4688-b7f5-ea07361b26a8")
 
 
-        buttonAdelante.setOnTouchListener { v, event ->
-            if (MotionEvent.ACTION_DOWN == event.action) {
-                val byteArray = "1".toByteArray(charset)
-                writeCharacteristic(bluetoothGatt.getService(uuid_service).getCharacteristic(uuid_characteristic), byteArray )
-            } else if (MotionEvent.ACTION_UP == event.action) {
-                val byteArray = "0".toByteArray(charset)
-                writeCharacteristic(bluetoothGatt.getService(uuid_service).getCharacteristic(uuid_characteristic), byteArray )
-            }
-            false
-        }
-
-
-
-        buttonStop.setOnClickListener {
-            val byteArray = "0".toByteArray(charset)
-            writeCharacteristic(bluetoothGatt.getService(uuid_service).getCharacteristic(uuid_characteristic), byteArray )
+        if (ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(
+               this,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            val permissions = arrayOf(
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            )
+            ActivityCompat.requestPermissions(this, permissions, 0)
         }
 
     }
@@ -187,6 +208,30 @@ class BluetoothActivity : AppCompatActivity() {
                     Handler(Looper.getMainLooper()).post {
 
                         bluetoothGatt?.discoverServices()
+                    }
+                    runOnUiThread {
+                        client = LocationServices.getFusedLocationProviderClient(this@BluetoothActivity)
+                        ejecutar()
+                        recyclerView.visibility = View.GONE
+                        var button : Button = findViewById(R.id.button_directo)
+                        var button2 : Button = findViewById(R.id.scan_button)
+                       snack.show()
+                        comandos()
+                        button.visibility = View.VISIBLE
+                        button2.visibility = View.GONE
+                        button.setOnClickListener {
+                            val urlString = "https://www.youtube.com/"
+                            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(urlString))
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                            intent.setPackage("com.android.chrome")
+                            try {
+                               startActivity(intent)
+                            } catch (ex: ActivityNotFoundException) {
+                                // Chrome browser presumably not installed so allow user to choose instead
+                                intent.setPackage(null)
+                                startActivity(intent)
+                            }
+                        }
                     }
                 }
             }
@@ -318,4 +363,65 @@ class BluetoothActivity : AppCompatActivity() {
     fun BluetoothGattCharacteristic.containsProperty(property: Int): Boolean {
         return properties and property != 0
     }
+
+    @SuppressLint("MissingPermission")
+    private fun getCurrentLocation() {
+            val locationManager: LocationManager =
+                getSystemService(Context.LOCATION_SERVICE) as LocationManager
+
+            if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || locationManager.isProviderEnabled(
+                    LocationManager.NETWORK_PROVIDER
+                )
+            ) {
+                val cancellationTokenSource = CancellationTokenSource()
+                client.getCurrentLocation(
+                    LocationRequest.PRIORITY_HIGH_ACCURACY,
+                    cancellationTokenSource.token
+                ).addOnCompleteListener {
+                    if (it.result != null) {
+                        latitude = it.result.latitude
+                        longitude = it.result.longitude
+
+
+                        FirebaseFirestore.getInstance().collection("user")
+                            .document(FirebaseAuth.getInstance().currentUser?.email.toString())
+                            .collection("datos").document("datos").update(
+                                mapOf("ubicacion" to "$latitude,$longitude")
+                            ).addOnFailureListener {
+                                FirebaseFirestore.getInstance().collection("user")
+                                    .document(FirebaseAuth.getInstance().currentUser?.email.toString())
+                                    .collection("datos").document("datos").set(
+                                        mapOf("ubicacion" to "$latitude,$longitude")
+                                    )
+                            }
+                    }
+                }
+            }
+    }
+
+    private fun ejecutar() {
+        val handler = Handler()
+        handler.postDelayed(object : Runnable {
+            override fun run() {
+                getCurrentLocation() //llamamos nuestro metodo
+                handler.postDelayed(this, 100000)
+            }
+        }, 5000)
+    }
+
+    private fun comandos (){
+        FirebaseFirestore.getInstance().collection("user")
+            .document(FirebaseAuth.getInstance().currentUser?.email.toString())
+            .addSnapshotListener { value, error ->
+                if (value!!.exists() && value.get("controller") != null) {
+                    val v = value.get("controller") as String
+                    val charset = Charsets.UTF_8
+                    val byteArray = v.toByteArray(charset)
+                    writeCharacteristic(bluetoothGatt.getService(uuid_service).getCharacteristic(uuid_characteristic), byteArray )
+                }
+            }
+    }
+
+
+
 }

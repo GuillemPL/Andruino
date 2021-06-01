@@ -32,7 +32,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Andruino">
-        <activity android:name=".ui.activities.BluetoothActivity"></activity>
+        <activity android:name=".ui.activities.BluetoothActivity" android:screenOrientation="landscape"></activity>
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
