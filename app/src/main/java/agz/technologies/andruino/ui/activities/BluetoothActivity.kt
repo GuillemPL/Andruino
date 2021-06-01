@@ -404,7 +404,8 @@ class BluetoothActivity : AppCompatActivity() {
                 getCurrentLocation() //llamamos nuestro metodo
                 handler.postDelayed(this, 10000)
             }
-        }, 500)
+        }, 500
+        )
     }
 
     private fun comandos (){
