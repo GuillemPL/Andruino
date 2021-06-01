@@ -14,10 +14,10 @@ import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.location.Location
 import android.location.LocationManager
 import android.net.Uri
 import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -26,6 +26,7 @@ import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -38,8 +39,11 @@ import com.google.android.gms.tasks.CancellationTokenSource
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ListenerRegistration
+import java.text.SimpleDateFormat
 import org.jetbrains.anko.find
 import java.util.*
+
 
 class BluetoothActivity : AppCompatActivity() {
     private val ENABLE_BLUETOOTH_REQUEST_CODE = 1
@@ -53,6 +57,9 @@ class BluetoothActivity : AppCompatActivity() {
     lateinit var uuid_service : UUID
     lateinit var uuid_characteristic : UUID
     private lateinit var recyclerView: RecyclerView
+    private var  listener : ListenerRegistration? = null
+    val handler = Handler()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_bluetooth)
@@ -81,7 +88,7 @@ class BluetoothActivity : AppCompatActivity() {
                 this,
                 Manifest.permission.ACCESS_FINE_LOCATION
             ) != PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(
-               this,
+                this,
                 Manifest.permission.ACCESS_COARSE_LOCATION
             ) != PackageManager.PERMISSION_GRANTED
         ) {
@@ -367,37 +374,77 @@ class BluetoothActivity : AppCompatActivity() {
 
     @SuppressLint("MissingPermission")
     private fun getCurrentLocation() {
-            val locationManager: LocationManager =
-                getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        val locationManager: LocationManager =
+            getSystemService(Context.LOCATION_SERVICE) as LocationManager
 
-            if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || locationManager.isProviderEnabled(
-                    LocationManager.NETWORK_PROVIDER
-                )
-            ) {
-                val cancellationTokenSource = CancellationTokenSource()
-                client.getCurrentLocation(
-                    LocationRequest.PRIORITY_HIGH_ACCURACY,
-                    cancellationTokenSource.token
-                ).addOnCompleteListener {
-                    if (it.result != null) {
-                        latitude = it.result.latitude
-                        longitude = it.result.longitude
+        if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || locationManager.isProviderEnabled(
+                LocationManager.NETWORK_PROVIDER
+            )
+        ) {
+            val cancellationTokenSource = CancellationTokenSource()
+            client.getCurrentLocation(
+                LocationRequest.PRIORITY_HIGH_ACCURACY,
+                cancellationTokenSource.token
+            ).addOnCompleteListener {
+                if (it.result != null) {
+                    latitude = it.result.latitude
+                    longitude = it.result.longitude
+                    FirebaseFirestore.getInstance().collection("user")
+                        .document(FirebaseAuth.getInstance().currentUser?.email.toString())
+                        .collection("datos")
+                        .document("datos").get().addOnSuccessListener {
+                            val date = SimpleDateFormat("dd-MM-yyyy").format(Date())
+                            var fech = ""
+                            if (it.get("ultimaFechaCon") != null){
+                                fech = it.get("ultimaFechaCon") as String
+                            }
 
+                            var metrosTotales = 0.0
+                            var metrosdiarios = 0.0
 
-                        FirebaseFirestore.getInstance().collection("user")
-                            .document(FirebaseAuth.getInstance().currentUser?.email.toString())
-                            .collection("datos").document("datos").update(
-                                mapOf("ubicacion" to "$latitude,$longitude")
-                            ).addOnFailureListener {
+                            if (it.get("ubicacion") != null) {
+                                var ubicacion = it.get("ubicacion") as String
+                                var cordenadas = ubicacion.split(",")
+                                val locationA = Location("punto A")
+                                locationA.setLatitude(cordenadas[0].toDouble())
+                                locationA.setLongitude(cordenadas[1].toDouble())
+                                val locationB = Location("punto B")
+                                locationB.setLatitude(latitude)
+                                locationB.setLongitude(longitude)
+                                if (it.get("metrosTotales") != null) {
+                                    metrosTotales = (it.get("metrosTotales") as String).toDouble()
+                                }
+                                if (fech == date) {
+                                    if (it.get("metrosDiarios") != null) {
+                                        metrosdiarios = (it.get("metrosDiarios") as String).toDouble()
+                                    }
+                                }
+                                metrosTotales += locationA.distanceTo(locationB)
+                                metrosdiarios += locationA.distanceTo(locationB)
+                            }
                                 FirebaseFirestore.getInstance().collection("user")
                                     .document(FirebaseAuth.getInstance().currentUser?.email.toString())
-                                    .collection("datos").document("datos").set(
-                                        mapOf("ubicacion" to "$latitude,$longitude")
-                                    )
-                            }
-                    }
+                                    .collection("datos").document("datos").update(
+                                        mapOf("ubicacion" to "$latitude,$longitude",
+                                            "metrosTotales" to "$metrosTotales",
+                                            "metrosDiarios" to "$metrosdiarios",
+                                            "ultimaFechaCon" to "$date")
+                                    ).addOnFailureListener {
+                                        FirebaseFirestore.getInstance().collection("user")
+                                            .document(FirebaseAuth.getInstance().currentUser?.email.toString())
+                                            .collection("datos").document("datos").set(
+                                                mapOf("ubicacion" to "$latitude,$longitude",
+                                                    "metrosTotales" to "$metrosTotales",
+                                                    "metrosDiarios" to "$metrosdiarios",
+                                                    "ultimaFechaCon" to "$date")
+                                            )
+                                    }
+
+
+                        }
                 }
             }
+        }
     }
 
     private fun actualizarUbicacion() {
@@ -405,14 +452,15 @@ class BluetoothActivity : AppCompatActivity() {
         handler.postDelayed(object : Runnable {
             override fun run() {
                 getCurrentLocation() //llamamos nuestro metodo
-                handler.postDelayed(this, 10000)
+                handler.postDelayed(this, 100000)
             }
         }, 500
         )
+
     }
 
-    private fun comandos (){
-        FirebaseFirestore.getInstance().collection("user")
+    private fun comandos() {
+        listener = FirebaseFirestore.getInstance().collection("user")
             .document(FirebaseAuth.getInstance().currentUser?.email.toString())
             .addSnapshotListener { value, error ->
                 if (value!!.exists() && value.get("controller") != null) {
@@ -424,6 +472,13 @@ class BluetoothActivity : AppCompatActivity() {
             }
     }
 
+    override fun onBackPressed() {
+        super.onBackPressed()
+        if (listener != null){
+            listener?.remove()
+        }
+        handler.removeCallbacksAndMessages(null)
+    }
 
 
 }

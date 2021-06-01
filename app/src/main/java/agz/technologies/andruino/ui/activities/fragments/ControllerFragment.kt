@@ -39,28 +39,39 @@ class ControllerFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentControllerBinding.bind(view)
         webViewSetup()
-//        FirebaseFirestore.getInstance().collection("user")
-//            .document(FirebaseAuth.getInstance().currentUser?.email.toString()).collection("datos")
-//            .document("datos").get().addOnCompleteListener {
-//                val date = SimpleDateFormat("yyyy-MM-dd").format(Date())
-//                if (it.get("ultimaFechaCon") != null){
-//                    val fech = it.get("ultimaFechaCon") as String
-//                    if (fech != date){
-//                        FirebaseFirestore.getInstance().collection("user")
-//                            .document(FirebaseAuth.getInstance().currentUser?.email.toString())
-//                            .collection("datos").document("datos").set(
-//                                mapOf("tiempoUso" to "0")
-//                            )
-//                    }
-//                }else{
-//                    FirebaseFirestore.getInstance().collection("user")
-//                        .document(FirebaseAuth.getInstance().currentUser?.email.toString())
-//                        .collection("datos").document("datos").set(
-//                            mapOf("ultimaFechaCon" to date)
-//                        )
-//                }
-//            }
+        FirebaseFirestore.getInstance().collection("user")
+            .document(FirebaseAuth.getInstance().currentUser?.email.toString()).collection("datos")
+            .document("datos").get().addOnSuccessListener {
+                val date = SimpleDateFormat("dd-MM-yyyy").format(Date())
 
+                if (it.get("ultimaFechaCon") != null) {
+                    val fech = it.get("ultimaFechaCon") as String
+                    if (fech != date) {
+                        FirebaseFirestore.getInstance().collection("user")
+                            .document(FirebaseAuth.getInstance().currentUser?.email.toString())
+                            .collection("datos").document("datos").update(
+                                mapOf(
+                                    "tiempoUso" to "0",
+                                    "tiempoUsoTotal" to "0",
+                                    "ultimaFechaCon" to date
+                                )
+                            )
+                    }
+                } else {
+                    FirebaseFirestore.getInstance().collection("user")
+                        .document(FirebaseAuth.getInstance().currentUser?.email.toString())
+                        .collection("datos")
+                        .document("datos").update(
+                            mapOf("ultimaFechaCon" to date)
+                        ).addOnFailureListener {
+                            FirebaseFirestore.getInstance().collection("user")
+                                .document(FirebaseAuth.getInstance().currentUser?.email.toString())
+                                .collection("datos").document("datos").set(
+                                    mapOf("ultimaFechaCon" to date)
+                                )
+                        }
+                }
+            }
 
         binding.up.setOnTouchListener { v, event ->
             if (MotionEvent.ACTION_DOWN == event.action) {
@@ -145,8 +156,9 @@ class ControllerFragment : Fragment() {
                 var tiempoUsoTotal: Long = 0
                 if (it.get("tiempoUsoTotal") != null) {
                     tiempoUsoTotal = (it.get("tiempoUsoTotal") as String).toLong()
-                    tiempoUsoTotal += tuso
+
                 }
+                tiempoUsoTotal += tuso
 
                 var tiempoUso:Long = 0
                 if (it.get("tiempoUso") != null) {
