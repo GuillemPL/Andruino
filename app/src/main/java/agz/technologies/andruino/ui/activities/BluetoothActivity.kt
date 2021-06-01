@@ -22,13 +22,10 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
-import android.view.MotionEvent
 import android.view.View
 import android.widget.Button
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -211,15 +208,16 @@ class BluetoothActivity : AppCompatActivity() {
                     }
                     runOnUiThread {
                         client = LocationServices.getFusedLocationProviderClient(this@BluetoothActivity)
-                        ejecutar()
+                        actualizarUbicacion()
                         recyclerView.visibility = View.GONE
                         var button : Button = findViewById(R.id.button_directo)
                         var button2 : Button = findViewById(R.id.scan_button)
                        snack.show()
-                        comandos()
+
                         button.visibility = View.VISIBLE
                         button2.visibility = View.GONE
                         button.setOnClickListener {
+                            comandos()
                             val urlString = "https://www.youtube.com/"
                             val intent = Intent(Intent.ACTION_VIEW, Uri.parse(urlString))
                             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
@@ -399,14 +397,14 @@ class BluetoothActivity : AppCompatActivity() {
             }
     }
 
-    private fun ejecutar() {
+    private fun actualizarUbicacion() {
         val handler = Handler()
         handler.postDelayed(object : Runnable {
             override fun run() {
                 getCurrentLocation() //llamamos nuestro metodo
-                handler.postDelayed(this, 100000)
+                handler.postDelayed(this, 10000)
             }
-        }, 5000)
+        }, 500)
     }
 
     private fun comandos (){
