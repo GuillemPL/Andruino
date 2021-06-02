@@ -27,4 +27,9 @@
     -->
     <string name="hello_world">Hello Square World!</string>
     <string name="inicioScan">Inicie el escaneo y conéctese al andruino.</string>
+    <string name="tiempo_de_uso">Tiempo de uso</string>
+    <string name="total">total</string>
+    <string name="sesion_actual">sesion actual</string>
+    <string name="distancia_recorrida">Distancia Recorrida</string>
+    <string name="ultima_ubicacion">Última ubicación</string>
 </resources>
