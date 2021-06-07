@@ -52,7 +52,6 @@ class ControllerFragment : Fragment() {
                             .collection("datos").document("datos").update(
                                 mapOf(
                                     "tiempoUso" to "0",
-                                    "tiempoUsoTotal" to "0",
                                     "ultimaFechaCon" to date
                                 )
                             )
@@ -134,7 +133,7 @@ class ControllerFragment : Fragment() {
             settings.mediaPlaybackRequiresUserGesture = false
 
             settings.userAgentString = newUA
-            loadUrl("https://www.youtube.com/watch?v=8SEQaB7BrLg&ab_channel=MightExos")
+            loadUrl("https://www.youtube.com/channel/UCQc2A4frlafZ8RDTKW6PpXQ")
         }
     }
 
